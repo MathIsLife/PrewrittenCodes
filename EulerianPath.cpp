@@ -8,10 +8,10 @@ using namespace std;
 // Undirected graph: path exists iff number of odd degree nodes is zero or two
 
 // Directed graph: circuit (or edge disjoint directed cycles) exists iff each node 
-//                 satisfies in_degree = out_degree and the graph is strongly connected
-// Directed graph: path exists iff at most one vertex has in_degree - out_degree = 1 and
-//                 at most one vertex has out_degree - in_degree = 1 and all other vertices 
-//                 have in_degree = out_degree, and graph is weakly connected
+//   satisfies in_degree = out_degree and the graph is strongly connected
+// Directed graph: path exists iff at most one vertex has in_degree - out_degree = 1
+//   and at most one vertex has out_degree - in_degree = 1 and all other vertices have
+//   in_degree = out_degree, and graph is weakly connected
 
 const int N = 200010;
 
@@ -20,10 +20,11 @@ vector <int> g[N];
 vector <int> circ;
 int n, m, deg[N], U[N], V[N];
 
-void hierholzer() {
+void hierholzer (int src) {
+  if (!deg[src]) return;
   vector <int> path;
-  path.push_back(1);
-  int at = 1;
+  path.push_back(src);
+  int at = src;
   while (!path.empty()) {
     if (deg[at]) {
       path.push_back(at);
@@ -46,7 +47,7 @@ int main() {
     g[V[i]].push_back(i);
     ++deg[U[i]], ++deg[V[i]];
   }
-  hierholzer();
+  hierholzer(1);
   for (int x : circ) printf("%d ", x); puts("");
   return 0;
 }
