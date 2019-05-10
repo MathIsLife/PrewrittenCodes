@@ -6,7 +6,7 @@ const int N = 40010;
 const int INF = 1e8 + 5;
 
 vector <int> g[N]; 
-int match[N], dist[N], n, m, p;
+int n, m, p, match[N], dist[N];
 
 bool bfs() {
   queue <int> q; 
