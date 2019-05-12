@@ -56,6 +56,7 @@ vector <int> multiply (vector <int> a, vector <int> b) {
   ntt(f_a, sz, 1); return vector <int> (f_a, f_a + n + m - 1);
 }
 
+// G = primitive_root(MOD)
 int primitive_root (int p) {
   vector <int> factor;
   int tmp = p - 1;
