@@ -80,6 +80,7 @@ int primitive_root (int p) {
 }
 
 int main() {
+  // (x + 2)(x + 3) = x^2 + 5x + 6
   vector <int> a = {2, 1};
   vector <int> b = {3, 1};
   vector <int> c = multiply(a, b);
