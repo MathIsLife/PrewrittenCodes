@@ -35,7 +35,7 @@ struct AC {
 
   void compute() {
     queue <int> q;
-    for (q.push(0); !q.empty(); ) {
+    for (q.push(0); !q.empty();) {
       int u = q.front(); q.pop();
       for (int c = 0; c < A; ++c) {
         int v = next[u][c];
