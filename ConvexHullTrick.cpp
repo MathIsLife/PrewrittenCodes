@@ -8,7 +8,7 @@ const ll IS_QUERY = -(1LL << 62);
 
 struct line {
   ll m, b;
-  mutable function <const line* ()> succ;
+  mutable function <const line*()> succ;
 
   bool operator < (const line &rhs) const {
     if (rhs.b != IS_QUERY) return m < rhs.m;
