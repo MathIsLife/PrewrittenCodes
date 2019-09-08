@@ -48,6 +48,7 @@ namespace FWHT {
     for (int i = 0; i < n; ++i) b[i] = B[i];
     forward_fwht(a, n, flag);
     forward_fwht(b, n, flag);
+    // apply mod if required
     for (int i = 0; i < n; ++i) a[i] = a[i] * b[i];
     inverse_fwht(a, n, flag);
     return vector <ll> (a, a + n);
