@@ -4,13 +4,12 @@ using namespace std;
 
 typedef long long ll;
 
+const int OR = 0;
+const int AND = 1;
+const int XOR = 2;
 const int N = (1 << 20) + 5;
 
 namespace FWHT {
-  const int OR = 0;
-  const int AND = 1;
-  const int XOR = 2;
-  
   ll a[N], b[N];
 
   void forward_fwht (ll *arr, int n, int flag = XOR) {
@@ -53,18 +52,6 @@ namespace FWHT {
     inverse_fwht(a, n, flag);
     return vector <ll> (a, a + n);
   }
-
-  vector <ll> or_convolution (int n, ll *A, ll *B) {
-    return convolution(n, A, B, OR);
-  }
-
-  vector <ll> and_convolution (int n, ll *A, ll *B) {
-    return convolution(n, A, B, AND);
-  }
-
-  vector <ll> xor_convolution (int n, ll *A, ll *B) {
-    return convolution(n, A, B, XOR);
-  }
 }
 
 int n; ll A[N], B[N];
@@ -74,7 +61,7 @@ int main() {
   for (int i = 0; i < n; ++i) A[i] = rand() & 1, B[i] = rand() & 1;
   for (int i = 0; i < n; ++i) cout << A[i] << " "; cout << '\n';
   for (int i = 0; i < n; ++i) cout << B[i] << " "; cout << '\n';
-  vector <ll> res = FWHT::xor_convolution(n, A, B);
+  vector <ll> res = FWHT::convolution(n, A, B, XOR);
   for (auto it : res) cout << it << " "; cout << '\n';
   return 0;
 }
