@@ -71,8 +71,7 @@ int primitive_root (int p) {
     bool flag = true;
     for (int i = 0; i < (int) factor.size(); ++i) {
       if (bigMod(root, (p - 1) / factor[i], p) == 1) {
-        flag = false;
-        break;
+        flag = false; break;
       }
     }
     if (flag) return root;
