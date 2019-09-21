@@ -19,7 +19,7 @@ ll get (ll x, ll n, ll m, ll lim) {
   return ret + p * lim - get(m - x + n - 1, m, n, p);
 }
 
-// sum [(x + kn) / m] for 0 <= k < lim
+// sum [(x + kn) / m] for 0 <= k < lim in O(lg max(n, m))
 inline ll floorAPsum (ll x, ll n, ll m, ll lim) {
   ll tmp = aux(x, n, m), tot = lim / m;
   ll ret = tmp * tot + tot * (tot - 1) * n * m / 2 + tot * n * (lim - tot * m);
