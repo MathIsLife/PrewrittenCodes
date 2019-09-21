@@ -20,6 +20,7 @@ ll get (ll x, ll n, ll m, ll lim) {
 }
 
 // sum [(x + kn) / m] for 0 <= k < lim in O(lg max(n, m))
+// m > 0, lim >= 0
 inline ll floorAPsum (ll x, ll n, ll m, ll lim) {
   ll ret = 0;
   if (x < 0) {
