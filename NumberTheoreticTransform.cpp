@@ -62,11 +62,11 @@ int primitive_root (int p) {
   int tmp = p - 1;
   for (int i = 2; i * i <= tmp; ++i) {
     if (tmp % i == 0) {
-      factor.push_back(i);
+      factor.emplace_back(i);
       while (tmp % i == 0) tmp /= i;  
     }
   }
-  if (tmp != 1) factor.push_back(tmp);
+  if (tmp != 1) factor.emplace_back(tmp);
   for (int root = 1; ; ++root) {
     bool flag = true;
     for (int i = 0; i < (int) factor.size(); ++i) {
