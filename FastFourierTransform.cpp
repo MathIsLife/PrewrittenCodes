@@ -165,6 +165,23 @@ namespace FFT {
     }
     return make_pair(d, r);
   }
+
+  vector <int> chirp_Z_transform (vector <int> a, int z, int k, int mod) {
+    int n = a.size();
+    vector <int> x, y;
+    int iz = bigMod(z, mod - 2, mod);
+    for (int i = 0; i < n; ++i) {
+      x.push_back((ll) a[i] * bigMod(z, (ll) i * i, mod) % mod);
+    }
+    for (int i = 1 - n; i < k; ++i) {
+      y.push_back(bigMod(iz, (ll) i * i, mod));
+    }
+    vector <int> r = FFT::multiply(x, y, mod), res(k);
+    for (int i = 0; i < k; ++i) {
+      res[i] = (ll) r[i + n - 1] * bigMod(z, (ll) i * i, mod) % mod;
+    }
+    return res;
+  }
 }
 
 const int N = 1e5 + 5;
@@ -240,10 +257,29 @@ void testMulEval() {
   }
 }
 
+void test_chirp_Z_transform() {
+  int n = 1234;
+  vector <int> a(n);
+  for (int i = 0; i < n; ++i) {
+    a[i] = rand() % MOD;
+  }
+  int z = rand() % MOD;
+  vector <int> r = FFT::chirp_Z_transform(a, z, n, MOD);
+  for (int i = 0; i < n; ++i) {
+    int x = FFT::bigMod(z, i + i, MOD), y = 0;
+    for (int j = 0; j < n; ++j) {
+      y += (ll) a[j] * FFT::bigMod(x, j, MOD) % MOD;
+      if (y >= MOD) y -= MOD;
+    }
+    assert(y == r[i]);
+  }
+}
+
 int main() {
-  srand(time(NULL));
+  srand(time(0));
   testDivMod();
   testMulEval();
+  test_chirp_Z_transform();
   cerr << "Correct!\n";
   cerr << "\nTime elapsed: " << 1000 * clock() / CLOCKS_PER_SEC << "ms.\n";
   return 0;
