@@ -1,4 +1,4 @@
-// Solves SPOJ FASTFLOW
+// O(V^2 E), solves SPOJ FASTFLOW
 
 #include <bits/stdc++.h>
 
