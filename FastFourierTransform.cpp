@@ -171,10 +171,10 @@ namespace FFT {
     vector <int> x, y;
     int iz = bigMod(z, mod - 2, mod);
     for (int i = 0; i < n; ++i) {
-      x.push_back((ll) a[i] * bigMod(z, (ll) i * i, mod) % mod);
+      x.emplace_back((ll) a[i] * bigMod(z, (ll) i * i, mod) % mod);
     }
     for (int i = 1 - n; i < k; ++i) {
-      y.push_back(bigMod(iz, (ll) i * i, mod));
+      y.emplace_back(bigMod(iz, (ll) i * i, mod));
     }
     vector <int> r = FFT::multiply(x, y, mod), res(k);
     for (int i = 0; i < k; ++i) {
@@ -217,10 +217,10 @@ void testDivMod() {
   int n = 1000 + rand() % 100, m = 100 + rand() % 10;
   vector <int> a, b;
   for (int i = 0; i < n; ++i) {
-    a.push_back(rand() % MOD);
+    a.emplace_back(rand() % MOD);
   }
   for (int i = 0; i < m; ++i) {
-    b.push_back(rand() % MOD);
+    b.emplace_back(rand() % MOD);
   }
   pair <vector <int>, vector <int> > res = FFT::divMod(a, b, MOD);
   vector <int> d = res.first;
@@ -243,7 +243,7 @@ void testMulEval() {
     a[i] = rand() % MOD;
   }
   for (int i = 0; i < m; ++i) {
-    poly.push_back(rand() % MOD);
+    poly.emplace_back(rand() % MOD);
   }
   build(1, 0, n - 1);
   vector <int> vals(n);
