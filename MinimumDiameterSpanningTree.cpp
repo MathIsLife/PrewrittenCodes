@@ -63,7 +63,8 @@ int main() {
       for (int it = 2; it <= n; ++it) {
         int i = id[it];
         if (d[v][i] <= d[v][last]) continue; 
-        ll curX = (w - d[u][i] + d[v][last]) / 2, curY = (w + d[u][i] + d[v][last]) / 2;
+        ll curX = (w - d[u][i] + d[v][last]) / 2;
+        ll curY = (w + d[u][i] + d[v][last]) / 2;
         if (minVal > curY) minVal = curY, opt = curX; last = i;
       }
       if (minVal > d[v][last]) minVal = d[v][last], opt = w;
@@ -71,8 +72,10 @@ int main() {
     }
   }
   ++n;
-  ++m, U[m] = U[ed], V[m] = n, W[m] = far, g[U[m]].emplace_back(m), g[V[m]].emplace_back(m);
-  ++m, U[m] = V[ed], V[m] = n, W[m] = W[ed] - far, g[U[m]].emplace_back(m), g[V[m]].emplace_back(m);
+  ++m, U[m] = U[ed], V[m] = n, W[m] = far;
+  g[U[m]].emplace_back(m), g[V[m]].emplace_back(m);
+  ++m, U[m] = V[ed], V[m] = n, W[m] = W[ed] - far; 
+  g[U[m]].emplace_back(m), g[V[m]].emplace_back(m);
   priority_queue <pair <ll, int>> pq;
   pq.emplace(0, n);
   for (int i = 1; i < n; ++i) dist[i] = INF;
@@ -80,7 +83,9 @@ int main() {
     int u = pq.top().second; pq.pop();
     for (int e : g[u]) if (e ^ ed) {
       int v = U[e] ^ u ^ V[e]; ll w = W[e];
-      if (dist[v] > dist[u] + w) dist[v] = dist[u] + w, par[v] = u, pq.emplace(-dist[v], v);
+      if (dist[v] > dist[u] + w) {
+        dist[v] = dist[u] + w, par[v] = u, pq.emplace(-dist[v], v);
+      }
     }
   }
   printf("%lld\n", global);
