@@ -13,23 +13,10 @@ inline bool good (lll x_1, lll y_1, lll x_2, lll y_2, lll x_3, lll y_3) {
   return x_1 * y_2 + x_2 * y_3 + x_3 * y_1 >= y_1 * x_2 + y_2 * x_3 + y_3 * x_1;
 }
 
-bitset <M> done; 
 ll d[N][N], W[M];
 vector <int> g[N];
 int n, m, U[M], V[M], id[N], par[N];
 ll ed, far, global = LLONG_MAX, dist[N];
-
-inline int find (int x) {
-  return par[x] == x ? x : par[x] = find(par[x]);
-}
-
-inline void unite (int u, int v) {
-  if (find(u) == find(v)) return;
-  if (rand() & 1) swap(u, v);
-  par[find(u)] = find(v);
-  if (u > v) swap(u, v);
-  printf("%d %d\n", u, v);
-}
 
 int main() {
   cin >> n >> m;
@@ -55,17 +42,18 @@ int main() {
   }
   for (int u = 1; u <= n; ++u) {
     sort(id + 1, id + n + 1, [&] (int i, int j) {return d[u][i] > d[u][j];});
-    for (int e : g[u]) if (!done[e]) {
+    for (int e : g[u]) {
       int v = U[e] ^ u ^ V[e]; ll w = W[e];
-      if (v < u) continue; done[e] = 1;
-      ll opt = 0, minVal = d[u][id[1]];
+      if (v < u) continue; 
       int last = id[1];
+      ll opt = 0, minVal = d[u][last];
       for (int it = 2; it <= n; ++it) {
         int i = id[it];
         if (d[v][i] <= d[v][last]) continue; 
         ll curX = (w - d[u][i] + d[v][last]) / 2;
         ll curY = (w + d[u][i] + d[v][last]) / 2;
-        if (minVal > curY) minVal = curY, opt = curX; last = i;
+        if (minVal > curY) minVal = curY, opt = curX; 
+        last = i;
       }
       if (minVal > d[v][last]) minVal = d[v][last], opt = w;
       if (minVal < global) global = minVal, ed = e, far = opt;
@@ -90,7 +78,7 @@ int main() {
   }
   printf("%lld\n", global);
   printf("%d %d\n", U[ed], V[ed]);
-  for (int i = 1; i < n; ++i) if (par[i] != n) {
+  for (int i = 1; i < n; ++i) if (par[i] ^ n) {
     int u = i, v = par[i];
     if (u > v) swap(u, v); 
     printf("%d %d\n", u, v);
