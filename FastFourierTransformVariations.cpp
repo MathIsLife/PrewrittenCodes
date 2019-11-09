@@ -199,7 +199,7 @@ void build (int p, int L, int R) {
   }
   build(p << 1, L, L + R >> 1);
   build(p << 1 | 1, (L + R >> 1) + 1, R);
-  st[p] = FFT::multiply(st[p << 1], st[p << 1 | 1]);
+  st[p] = FFT::multiply(st[p << 1], st[p << 1 | 1], MOD);
   while (st[p].size() > R - L + 2) st[p].pop_back();
 }
 
