@@ -79,24 +79,6 @@ vector <ll> multiply (vector <ll> a, vector <ll> b) {
   return c;
 }
 
-int t, n;
-
-int main() {
-  cin >> t;
-  while (t--) {
-    cin >> n;
-    vector <ll> a(n + 1), b(n + 1);
-    for (int i = 0; i <= n; ++i) scanf("%lld", &a[i]);
-    for (int i = 0; i <= n; ++i) scanf("%lld", &b[i]);
-    vector <ll> c = multiply(a, b);
-    for (int i = 0; i <= n + n; ++i) {
-      if (i) printf(" "); printf("%lld", c[i]);
-    }
-    puts("");
-  }
-  return 0;
-}
-
 int main() {
   // (x + 2)(x + 3) = x^2 + 5x + 6
   vector <ll> a = {2, 1};
