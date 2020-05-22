@@ -1,4 +1,4 @@
-// Hungarian Algorithm, O(n^2 m)
+// Hungarian Algorithm: O(n^2 m)
 
 #include <bits/stdc++.h>
 
