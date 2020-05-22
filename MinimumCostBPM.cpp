@@ -19,8 +19,7 @@ pair <ll, vector <int>> hungarian (const vector <vector <ll>> &a) {
     vector <bool> done(m + 1);
     vector <ll> dist(m, INF);
     do {
-      done[x] = 1;
-      y = p[x], delta = INF;
+      done[x] = 1, y = p[x], delta = INF;
       for (int j = 1; j < m; ++j) if (!done[j]) {
         ll cur = a[y - 1][j - 1] - u[y] - v[j];
         if (cur < dist[j]) dist[j] = cur, pre[j] = x;
