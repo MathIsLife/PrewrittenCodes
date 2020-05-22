@@ -14,13 +14,13 @@ pair <ll, vector <int>> hungarian (const vector <vector <ll>> &a) {
   vector <ll> u(n), v(m);
   vector <int> p(m), ans(n - 1);
   for (int i = 1; i < n; ++i) {
-    p[0] = i; int x = 0;
+    p[0] = i; int x = 0, y, z;
     vector <int> pre(m, -1);
     vector <bool> done(m + 1);
     vector <ll> dist(m, INF);
     do {
       done[x] = 1;
-      int y = p[x], z, delta = INF;
+      y = p[x], delta = INF;
       for (int j = 1; j < m; ++j) if (!done[j]) {
         ll cur = a[y - 1][j - 1] - u[y] - v[j];
         if (cur < dist[j]) dist[j] = cur, pre[j] = x;
@@ -29,13 +29,9 @@ pair <ll, vector <int>> hungarian (const vector <vector <ll>> &a) {
       for (int j = 0; j < m; ++j) {
         if (done[j]) u[p[j]] += delta, v[j] -= delta;
         else dist[j] -= delta;
-      }
-      x = z;
+      } x = z;
     } while (p[x]);
-    while (x) {
-      int z = pre[x];
-      p[x] = p[z], x = z;
-    }
+    while (x) z = pre[x], p[x] = p[z], x = z;
   }
   for (int j = 1; j < m; ++j) if (p[j]) ans[p[j] - 1] = j - 1;
   return {-v[0], ans};
