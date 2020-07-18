@@ -4,7 +4,7 @@ using namespace std;
 
 typedef long long ll;
 
-ll sum (ll n) {
+inline ll sum (ll n) {
   return n * (n - 1) / 2;
 }
 
