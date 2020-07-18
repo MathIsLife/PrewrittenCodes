@@ -17,6 +17,7 @@ ll bigMod (ll a, ll e) {
 }
 
 vector <ll> berlekampMassey (vector <int> s) {
+  if (s.empty()) return {};
   int n = s.size(), L = 0, m = 0;
   vector <ll> C(n), B(n), T;
   C[0] = B[0] = 1; ll b = 1;
