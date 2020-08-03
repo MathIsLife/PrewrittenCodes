@@ -85,6 +85,11 @@ void exp (int *a, int n, int *b) {
 int n, a[N], b[N];
 
 int main() {
+  inv[1] = 1;
+  for (int i = 2; i < N; ++i) {
+    inv[i] = (ll) inv[MOD % i] * (MOD / i) % MOD;
+    if (inv[i]) inv[i] = MOD - inv[i];
+  }
   cin >> n;
   for (int i = 0; i < n; ++i) scanf("%d", a + i);
   int m = 1; while (m < n) m <<= 1;
