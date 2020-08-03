@@ -9,9 +9,13 @@ struct frac {
 
   frac (ll _u = 0, ll _d = 1) {
     u = _u, d = _d;
-    ll g = __gcd(abs(u), abs(d));
-    u /= g, d /= g;
-    if (d < 0) u = -u, d = -d;
+    if (d) {
+      ll g = __gcd(abs(u), abs(d));
+      u /= g, d /= g;
+      if (d < 0) u = -u, d = -d;
+    } else {
+      u = 1;
+    }
   }
 
   inline void print() {
