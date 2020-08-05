@@ -22,16 +22,13 @@ struct cplx {
     return cplx(a * c.a - b * c.b, a * c.b + b * c.a);
   }
 
-  const cplx operator / (const ld &x) const {
-    return cplx(a / x, b / x);
-  }
-
   const cplx conj() const {
     return cplx(a, -b);
   }
 };
 
 const ld PI = acosl(-1);
+const int MOD = 1e9 + 7;
 const int N = (1 << 20) + 5;
 
 int rev[N]; cplx w[N];
@@ -41,7 +38,8 @@ void prepare (int &n) {
   for (int i = 1; i < n; ++i) rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (sz - 1));
   w[0] = 0, w[1] = 1, sz = 1; 
   while (1 << sz < n) {
-    cplx w_n = cplx(cosl(2 * PI / (1 << (sz + 1))), sinl(2 * PI / (1 << (sz + 1))));
+    ld ang = 2 * PI / (1 << (sz + 1));
+    cplx w_n = cplx(cosl(ang), sinl(ang));
     for (int i = 1 << (sz - 1); i < (1 << sz); ++i) {
       w[i << 1] = w[i], w[i << 1 | 1] = w[i] * w_n; 
     } ++sz;
@@ -62,29 +60,55 @@ void fft (cplx *a, int n) {
   }
 }
 
-static cplx f[N];
+static cplx f[N], g[N], u[N], v[N];
 
-vector <ll> multiply (vector <ll> a, vector <ll> b) {
-  int n = a.size(), m = b.size(), sz = 1;
-  while (sz < n + m - 1) sz <<= 1; prepare(sz);
+void multiply (int *a, int *b, int n, int m) {
+  int sz = n + m - 1; 
+  while (sz & (sz - 1)) sz = (sz | (sz - 1)) + 1;
+  prepare(sz);
   for (int i = 0; i < sz; ++i) f[i] = cplx(i < n ? a[i] : 0, i < m ? b[i] : 0);
   fft(f, sz);
   for (int i = 0; i <= (sz >> 1); ++i) {
-    int j = (sz - i) & (sz - 1);
-    cplx x = (f[i] * f[i] - (f[j] * f[j]).conj()) * cplx(0, -0.25);
-    f[j] = x, f[i] = x.conj();
+    int j = (sz - i) & (sz - 1); 
+    cplx x = (f[i] * f[i] - (f[j] * f[j]).conj()) * cplx(0, -0.25); 
+    f[j] = x, f[i] = x.conj(); 
   }
-  fft(f, sz); vector <ll> c(n + m - 1);
-  for (int i = 0; i < n + m - 1; ++i) c[i] = f[i].a / sz + 0.3;
-  return c;
+  fft(f, sz); 
+  for(int i = 0; i < sz; ++i) a[i] = f[i].a / sz + 0.5; 
 }
 
+inline void multiplyMod (int *a, int *b, int n, int m) {
+  int sz = 1;
+  while (sz < n + m - 1) sz <<= 1;
+  prepare(sz);
+  for (int i = 0; i < sz; ++i) {
+    f[i] = i < n ? cplx(a[i] & 32767, a[i] >> 15) : cplx(0, 0);
+    g[i] = i < m ? cplx(b[i] & 32767, b[i] >> 15) : cplx(0, 0);
+  }
+  fft(f, sz), fft(g, sz);
+  for (int i = 0; i < sz; ++i) {
+    int j = (sz - i) & (sz - 1);
+    static cplx da, db, dc, dd;
+    da = (f[i] + f[j].conj()) * cplx(0.5, 0);
+    db = (f[i] - f[j].conj()) * cplx(0, -0.5);
+    dc = (g[i] + g[j].conj()) * cplx(0.5, 0);
+    dd = (g[i] - g[j].conj()) * cplx(0, -0.5);
+    u[j] = da * dc + da * dd * cplx(0, 1); 
+    v[j] = db * dc + db * dd * cplx(0, 1);
+  }
+  fft(u, sz), fft(v, sz);
+  for(int i = 0; i < sz; ++i) {
+    int da = (ll) (u[i].a / sz + 0.5) % MOD;
+    int db = (ll) (u[i].b / sz + 0.5) % MOD;
+    int dc = (ll) (v[i].a / sz + 0.5) % MOD;
+    int dd = (ll) (v[i].b / sz + 0.5) % MOD;
+    a[i] = (da + ((ll) (db + dc) << 15) + ((ll) dd << 30)) % MOD;
+  }
+}
+
+
 int main() {
-  // (x + 2)(x + 3) = x^2 + 5x + 6
-  vector <ll> a = {2, 1};
-  vector <ll> b = {3, 1};
-  vector <ll> c = multiply(a, b);
-  for (int x : c) cout << x << " "; cout << endl;
+
   return 0;
 }
 
