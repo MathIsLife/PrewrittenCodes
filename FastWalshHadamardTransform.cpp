@@ -4,66 +4,61 @@ using namespace std;
 
 typedef long long ll;
 
-const int OR = 0;
-const int AND = 1;
-const int XOR = 2;
-const int N = (1 << 20) + 5;
+const int N = 1 << 20;
 
-namespace FWHT {
-  ll a[N], b[N];
+// apply modulo if necessary
 
-  void forward_fwht (ll *arr, int n, int flag = XOR) {
-    if (n == 0) return;
-    int i, m = n >> 1;
-    forward_fwht(arr, m, flag);
-    forward_fwht(arr + m, m, flag);
-
-    // apply mod if required
-    for (i = 0; i < m; ++i) {
-      ll x = arr[i], y = arr[i + m];
-      if (flag == OR) arr[i] = x, arr[i + m] = x + y;
-      if (flag == AND) arr[i] = x + y, arr[i + m] = y;
-      if (flag == XOR) arr[i] = x + y, arr[i + m] = x - y;
+void fwht_xor (int *a, int n, int dir = 0) {
+  for (int h = 1; h < n; h <<= 1) {
+    for (int i = 0; i < n; i += h << 1) {
+      for (int j = i; j < i + h; ++j) {
+        int x = a[j], y = a[j + h];
+        a[j] = x + y, a[j + h] = x - y;
+        if (dir) a[j] >>= 1, a[j + h] >>= 1;
+      }
     }
-  }
-
-  void inverse_fwht (ll *arr, int n, int flag = XOR) {
-    if (n == 0) return;
-    int i, m = n >> 1;
-    inverse_fwht(arr, m, flag);
-    inverse_fwht(arr + m, m, flag);
-
-    // apply mod if required
-    for (i = 0; i < m; ++i) { 
-      ll x = arr[i], y = arr[i + m];
-      if (flag == OR) arr[i] = x, arr[i + m] = y - x;
-      if (flag == AND) arr[i] = x - y, arr[i + m] = y;
-      if (flag == XOR) arr[i] = (x + y) >> 1, arr[i + m] = (x - y) >> 1;
-    }
-  }
-
-  vector <ll> convolution (int n, ll *A, ll *B, int flag = XOR) {
-    assert(!(n & (n - 1)));
-    for (int i = 0; i < n; ++i) a[i] = A[i];
-    for (int i = 0; i < n; ++i) b[i] = B[i];
-    forward_fwht(a, n, flag);
-    forward_fwht(b, n, flag);
-    // apply mod if required
-    for (int i = 0; i < n; ++i) a[i] = a[i] * b[i];
-    inverse_fwht(a, n, flag);
-    return vector <ll> (a, a + n);
   }
 }
 
-int n; ll A[N], B[N];
+void fwht_or (int *a, int n, int dir = 0) {
+  for (int h = 1; h < n; h <<= 1) {
+    for (int i = 0; i < n; i += h << 1) {
+      for (int j = i; j < i + h; ++j) {
+        int x = a[j], y = a[j + h];
+        a[j] = x, a[j + h] = dir ? y - x : x + y;
+      }
+    }
+  }
+}
+
+void fwht_and (int *a, int n, int dir = 0) {
+  for (int h = 1; h < n; h <<= 1) {
+    for (int i = 0; i < n; i += h << 1) {
+      for (int j = i; j < i + h; ++j) {
+        int x = a[j], y = a[j + h];
+        a[j] = dir ? x - y : x + y, a[j + h] = y;
+      }
+    }
+  }
+}
+
+int n, a[N], b[N], c[N];
 
 int main() {
-  srand(time(0)); n = 1 << 3;
-  for (int i = 0; i < n; ++i) A[i] = rand() & 1, B[i] = rand() & 1;
-  for (int i = 0; i < n; ++i) cout << A[i] << " "; cout << '\n';
-  for (int i = 0; i < n; ++i) cout << B[i] << " "; cout << '\n';
-  vector <ll> res = FWHT::convolution(n, A, B, XOR);
-  for (auto it : res) cout << it << " "; cout << '\n';
+  n = 1 << 16;
+  for (int i = 0; i < n; ++i) {
+    a[i] = rand() & 7;
+    b[i] = rand() & 7;
+  }
+  fwht_xor(a, n), fwht_xor(b, n);
+  for (int i = 0; i < n; ++i) {
+    c[i] = a[i] * b[i];
+  }
+  fwht_xor(c, n, 1);
+  for (int i = 0; i < n; ++i) {
+    cout << c[i] << " ";
+  }
+  cout << '\n';
   return 0;
 }
 
