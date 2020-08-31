@@ -20,7 +20,7 @@ int bigMod (int a, int e, int mod) {
   return ret;
 }
 
-void prepare (int &n) { 
+void prepare (int n) { 
   int sz = abs(31 - __builtin_clz(n));
   int r = bigMod(G, (MOD - 1) / n, MOD); 
   inv_n = bigMod(n, MOD - 2, MOD), w[0] = w[n] = 1; 
