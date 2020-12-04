@@ -40,7 +40,6 @@ ll tonelliShanks (ll x) {
 int t; ll x;
 
 int main() {
-  mt19937 rng(69);
   cin >> t;
   while (t--) {
     scanf("%lld %d", &x, &MOD);
