@@ -57,8 +57,8 @@ struct RangeHash {
   }
 
   inline ll getReverse (int l, int r) {
-    ll one = (rev[0][r + 1] - rev[0][l]) * pwr[0][l + 1] % MOD;
-    ll two = (rev[1][r + 1] - rev[1][l]) * pwr[1][l + 1] % MOD;
+    ll one = (rev[0][r + 1] - rev[0][l]) * pwr[0][r + 1] % MOD;
+    ll two = (rev[1][r + 1] - rev[1][l]) * pwr[1][r + 1] % MOD;
     if (one < 0) one += MOD; if (two < 0) two += MOD;
     return one << 31 | two;
   }
