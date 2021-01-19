@@ -68,7 +68,7 @@ int main() {
   initHash();
   string S; cin >> S;
   RangeHash machine(S);
-  cout << S.get(0, S.size() - 1) << '\n';
+  cout << machine.get(0, S.size() - 1) << '\n';
   return 0;
 }
 
