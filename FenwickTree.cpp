@@ -30,6 +30,7 @@ struct FenwickTree {
     assert(k > 0);
     for (int i = 0, j = lg; j >= 0; --j) {
       int cur = i | 1 << j;
+      if (cur > n) continue;
       if (f[cur] == k and one[cur]) return cur;
       if (f[cur] < k) i = cur, k -= f[cur];
     }
