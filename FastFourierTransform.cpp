@@ -33,7 +33,7 @@ const int N = (1 << 20) + 5;
 
 int rev[N]; cplx w[N];
 
-void prepare (int &n) { 
+void prepare (int n) { 
   int sz = __builtin_ctz(n);
   for (int i = 1; i < n; ++i) rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (sz - 1));
   w[0] = 0, w[1] = 1, sz = 1; 
@@ -105,7 +105,6 @@ inline void multiplyMod (int *a, int *b, int n, int m) {
     a[i] = (da + ((ll) (db + dc) << 15) + ((ll) dd << 30)) % MOD;
   }
 }
-
 
 int main() {
 
