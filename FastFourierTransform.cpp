@@ -3,7 +3,7 @@
 using namespace std;
 
 typedef long long ll;
-typedef long double ld;
+typedef long double ld; // USE DOUBLE, MUCH FASTER AND ALMOST ALWAYS WORKS
 
 struct cplx {
   ld a, b;
