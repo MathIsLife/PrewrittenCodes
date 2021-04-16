@@ -77,7 +77,7 @@ void multiply (int *a, int *b, int n, int m) {
   for(int i = 0; i < sz; ++i) a[i] = f[i].a / sz + 0.5; 
 }
 
-inline void multiplyMod (int *a, int *b, int n, int m) {
+void multiplyMod (int *a, int *b, int n, int m) {
   int sz = 1;
   while (sz < n + m - 1) sz <<= 1;
   prepare(sz);
