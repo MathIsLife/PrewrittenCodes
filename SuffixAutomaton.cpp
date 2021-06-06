@@ -7,8 +7,8 @@ using namespace std;
 const int N = 100010;
 
 char s[N], p[N];
-map <int, int> to[N + N];
-int len[N + N], link[N + N], sz, last;
+map <char, int> to[N << 1];
+int len[N << 1], link[N << 1], sz, last;
 
 inline void init() {
   len[0] = 0, link[0] = -1, sz = 1, last = 0, to[0].clear();
