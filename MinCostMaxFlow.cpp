@@ -2,84 +2,83 @@
 
 using namespace std;
 
-namespace MCMF {
-  using T = long long;
+typedef long long ll;
 
-  const int MAX = 100010;
-  const T INF = 1e12 + 69;
+const int N = 1234;
+const ll INF = 1e9 + 69;
 
-  bool vis[MAX];
-  T dist[MAX], caps[MAX];
-  int n, par[MAX], pos[MAX];
+struct edge {
+  int v, rev_pos;
+  ll cap, cost, flow = 0;
+  edge () {}
+  edge (int v, int p, ll cap, ll c) : v(v), rev_pos(p), cap(cap), cost(c) {}
+};
 
-  struct edge {
-    int to, rev_pos;
-    T cap, cost, flow;
-  };
+struct MCMF {
+  int n;
+  vector <vector <edge>> E;
 
-  vector <edge> g[MAX];
+  bitset <N> vis;
+  int par[N], pos[N];
+  ll caps[N], dist[N];
 
-  inline void init (int nodes) {
-    n = nodes;
-    for (int i = 0; i < n; ++i) g[i].clear();
+  MCMF (int n) : n(n), E(n) {}
+
+  inline void AddEdge (int u, int v, ll cap, ll cost = 0) {
+    E[u].emplace_back(v, E[v].size(), cap, cost);
+    E[v].emplace_back(u, E[u].size() - 1, 0, -cost);
   }
 
-  inline void AddEdge (int u, int v, T cap, T cost) {
-    edge a = {v, g[v].size(), cap, cost, 0};
-    edge b = {u, g[u].size(), 0, -cost, 0};
-    g[u].emplace_back(a);
-    g[v].emplace_back(b);
-  }
-
-  bool SPFA (int src, int snk) {
-    for (int i = 0; i < n; ++i) {
-      caps[i] = dist[i] = INF, vis[i] = 0;
-    }
+  bool SPFA (int S, int T) {
+    vis.reset();
+    for(int i = 0; i < n; ++i) caps[i] = dist[i] = INF;
     queue <int> q;
-    dist[src] = 0, vis[src] = 1, q.emplace(src);
+    q.emplace(S), dist[S] = 0, vis[S] = 1;
     while (!q.empty()) {
-      int u = q.front(); q.pop();
-      vis[u] = 0;
-      for(int i = 0; i < g[u].size(); ++i) {
-        edge &e = g[u][i];
-        int v = e.to;
-        if (e.cap > e.flow and dist[v] > dist[u] + e.cost) {
-          dist[v] = dist[u] + e.cost, par[v] = u, pos[v] = i;
-          caps[v] = min(caps[u], e.cap - e.flow);
-          if (!vis[v]) vis[v] = 1, q.emplace(v);
-        }
+      int i = 0, u = q.front();
+      q.pop(), vis[u] = 0;
+      for (auto &e : E[u]) {
+        int v = e.v;
+        ll f = e.cap - e.flow, w = dist[u] + e.cost;
+        if (f > 0 and dist[v] > w) {
+           dist[v] = w, par[v] = u, pos[v] = i;
+           caps[v] = min(caps[u], f);
+           if (!vis[v]) q.push(v), vis[v] = 1;
+        } ++i;
       }
     }
-    return dist[snk] != INF;
+    return dist[T] != INF;
   }
 
-  pair <T, T> MinCostFlow (int src, int snk) {
-    int u, v;
-    T flow = 0, cost = 0, f;
-    while (SPFA(src, snk)) {
-      u = snk, f = caps[u], flow += f;
-      while (u ^ src) {
-        v = par[u];
-        g[v][pos[u]].flow += f;
-        g[u][g[v][pos[u]].rev_pos].flow -= f;
-        u = v;
+  pair <ll, ll> GetMaxFlow (int S, int T) {
+    ll flow = 0, cost = 0;
+    while (SPFA(S, T)) {
+      int v = T;
+      ll f = caps[v];
+      flow += f;
+      while (v ^ S) {
+        int u = par[v];
+        edge &e = E[u][pos[v]];
+        e.flow += f;
+        E[v][e.rev_pos].flow -= f;
+        v = u;
       }
-      cost += dist[snk] * f;
+      cost += dist[T] * f;
     }
     return make_pair(flow, cost);
   }
-}
+};
 
 int main() {
   int n, m;
   cin >> n >> m;
-  MCMF::init(n);
+  MCMF flow_graph(n);
   while (m--) {
     int u, v, cap, cost;
     cin >> u >> v >> cap >> cost;
-    MCMF::AddEdge(u, v, cap, cost);
+    flow_graph.AddEdge(u, v, cap, cost);
   }
-  auto [flow, cost] = MCMF::MinCostFlow(0, n - 1);
+  auto [flow, cost] = flow_graph.GetMaxFlow(0, n - 1);
   cout << flow << " " << cost << '\n';
   return 0;
 }
