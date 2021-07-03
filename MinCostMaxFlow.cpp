@@ -29,7 +29,7 @@ struct MCMF {
 
   bool SPFA (int S, int T) {
     vis.reset();
-    for(int i = 0; i < n; ++i) caps[i] = dist[i] = INF;
+    for (int i = 0; i < n; ++i) caps[i] = dist[i] = INF;
     queue <int> q;
     q.emplace(S), dist[S] = 0, vis[S] = 1;
     while (!q.empty()) {
