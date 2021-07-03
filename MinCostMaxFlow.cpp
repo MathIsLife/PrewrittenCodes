@@ -43,7 +43,7 @@ namespace MCMF {
       for(int i = 0; i < g[u].size(); ++i) {
         edge &e = g[u][i];
         int v = e.to;
-        if (e.cap > e.flow and dist[v] > dist[u] + e.cost){
+        if (e.cap > e.flow and dist[v] > dist[u] + e.cost) {
           dist[v] = dist[u] + e.cost, par[v] = u, pos[v] = i;
           caps[v] = min(caps[u], e.cap - e.flow);
           if (!vis[v]) vis[v] = 1, q.emplace(v);
@@ -58,7 +58,7 @@ namespace MCMF {
     T flow = 0, cost = 0, f;
     while (SPFA(src, snk)) {
       u = snk, f = caps[u], flow += f;
-      while (u ^ src){
+      while (u ^ src) {
         v = par[u];
         g[v][pos[u]].flow += f;
         g[u][g[v][pos[u]].rev_pos].flow -= f;
