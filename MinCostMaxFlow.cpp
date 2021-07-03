@@ -10,8 +10,6 @@ const ll INF = 1e9 + 69;
 struct edge {
   int v, rev_pos;
   ll cap, cost, flow = 0;
-  edge () {}
-  edge (int v, int p, ll cap, ll c) : v(v), rev_pos(p), cap(cap), cost(c) {}
 };
 
 struct MCMF {
@@ -25,8 +23,8 @@ struct MCMF {
   MCMF (int n) : n(n), E(n) {}
 
   inline void AddEdge (int u, int v, ll cap, ll cost = 0) {
-    E[u].emplace_back(v, E[v].size(), cap, cost);
-    E[v].emplace_back(u, E[u].size() - 1, 0, -cost);
+    E[u].push_back({v, E[v].size(), cap, cost});
+    E[v].push_back({u, E[u].size() - 1, 0, -cost});
   }
 
   bool SPFA (int S, int T) {
