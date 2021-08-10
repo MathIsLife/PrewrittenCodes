@@ -41,7 +41,7 @@ int main() {
       }
     }
   }
-  for (int mask = 0; mask < 1 << n; ++mask)  ans[mask] = h[__builtin_popcount(mask)][mask];
+  for (int mask = 0; mask < 1 << n; ++mask) ans[mask] = h[__builtin_popcount(mask)][mask];
   return 0;
 }
 
